@@ -25,15 +25,15 @@ class GildedRose(var items: Array<Item>) {
     if (item.sellIn < ZERO) {
       if (item.name == AGED_BRIE) {
         if (item.quality < QUALITY_BOUND) {
-          item.quality = item.quality + ONE
+          item.quality = increaseQualityByOne(item)
         }
       } else {
         if (item.name != BCKS_PASSES) {
-          if (item.quality > ZERO && item.name != SULFURAS_HAND) {
-            item.quality = item.quality - ONE
+          if (item.name != SULFURAS_HAND && item.quality > ZERO) {
+            item.quality = decreaseQualityByOne(item)
           }
         } else {
-          item.quality = item.quality - item.quality
+          item.quality = decreaseQualityBySomeValue(item)
         }
       }
     }
@@ -41,29 +41,39 @@ class GildedRose(var items: Array<Item>) {
 
   fun updateSellin(item: Item) {
     if (item.name != SULFURAS_HAND) {
-      item.sellIn = item.sellIn - ONE
+      item.sellIn = decreaseSellIn(item)
     }
   }
 
   fun checkAndUpdateQualityOfItems(item: Item) {
     if (item.name != AGED_BRIE && item.name != BCKS_PASSES) {
-      if (item.quality > ZERO && item.name != SULFURAS_HAND) {
-        item.quality = item.quality - ONE
+      if (item.name != SULFURAS_HAND) {
+        if (item.quality > ZERO) {
+          item.quality = decreaseQualityByOne(item)
+        }
       }
     } else {
       if (item.quality < QUALITY_BOUND) {
-        item.quality = item.quality + ONE
+        item.quality = increaseQualityByOne(item)
 
         if (item.name == BCKS_PASSES) {
           if (item.sellIn < ELEVEN && item.quality < QUALITY_BOUND) {
-            item.quality = item.quality + ONE
+            item.quality = increaseQualityByOne(item)
           }
 
           if (item.sellIn < SIX && item.quality < QUALITY_BOUND) {
-            item.quality = item.quality + ONE
+            item.quality = increaseQualityByOne(item)
           }
         }
       }
     }
   }
+
+  fun increaseQualityByOne(item: Item) = item.quality + ONE
+
+  fun decreaseQualityByOne(item: Item) = item.quality - ONE
+
+  fun decreaseQualityBySomeValue(item: Item) = item.quality - item.quality
+
+  fun decreaseSellIn(item: Item) = item.sellIn - ONE
 }
