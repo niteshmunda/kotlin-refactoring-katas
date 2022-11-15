@@ -15,10 +15,8 @@ class GildedRose(var items: Array<Item>) {
     for (i in items.indices) {
 
       if (items[i].name != AGED_BRIE && items[i].name != BCKS_PASSES) {
-        if (items[i].quality > ZERO) {
-          if (items[i].name != SULFURAS_HAND) {
-            items[i].quality = items[i].quality - ONE
-          }
+        if (items[i].quality > ZERO && items[i].name != SULFURAS_HAND) {
+          items[i].quality = items[i].quality - ONE
         }
       } else {
         if (items[i].quality < QUALITY_BOUND) {
