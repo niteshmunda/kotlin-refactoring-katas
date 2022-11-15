@@ -12,46 +12,55 @@ import com.gildedrose.Constants.ZERO
 class GildedRose(var items: Array<Item>) {
 
   fun updateQuality() {
-    for (i in items.indices) {
+    items.forEach { item ->
+      checkAndUpdateQualityOfItems(item)
 
-      if (items[i].name != AGED_BRIE && items[i].name != BCKS_PASSES) {
-        if (items[i].quality > ZERO && items[i].name != SULFURAS_HAND) {
-          items[i].quality = items[i].quality - ONE
+      updateSellin(item)
+
+      updateQualityIfSellInIsLessThanZero(item)
+    }
+  }
+
+  private fun updateQualityIfSellInIsLessThanZero(item: Item) {
+    if (item.sellIn < ZERO) {
+      if (item.name == AGED_BRIE) {
+        if (item.quality < QUALITY_BOUND) {
+          item.quality = item.quality + ONE
         }
       } else {
-        if (items[i].quality < QUALITY_BOUND) {
-          items[i].quality = items[i].quality + ONE
-
-          if (items[i].name == BCKS_PASSES) {
-            if (items[i].sellIn < ELEVEN && items[i].quality < QUALITY_BOUND) {
-              items[i].quality = items[i].quality + ONE
-            }
-
-            if (items[i].sellIn < SIX && items[i].quality < QUALITY_BOUND) {
-              items[i].quality = items[i].quality + ONE
-            }
-          }
-        }
-      }
-
-      if (items[i].name != SULFURAS_HAND) {
-        items[i].sellIn = items[i].sellIn - ONE
-      }
-
-      if (items[i].sellIn < ZERO) {
-        if (items[i].name != AGED_BRIE) {
-          if (items[i].name != BCKS_PASSES) {
-            if (items[i].quality > ZERO) {
-              if (items[i].name != SULFURAS_HAND) {
-                items[i].quality = items[i].quality - ONE
-              }
-            }
-          } else {
-            items[i].quality = items[i].quality - items[i].quality
+        if (item.name != BCKS_PASSES) {
+          if (item.quality > ZERO && item.name != SULFURAS_HAND) {
+            item.quality = item.quality - ONE
           }
         } else {
-          if (items[i].quality < QUALITY_BOUND) {
-            items[i].quality = items[i].quality + ONE
+          item.quality = item.quality - item.quality
+        }
+      }
+    }
+  }
+
+  fun updateSellin(item: Item) {
+    if (item.name != SULFURAS_HAND) {
+      item.sellIn = item.sellIn - ONE
+    }
+  }
+
+  fun checkAndUpdateQualityOfItems(item: Item) {
+    if (item.name != AGED_BRIE && item.name != BCKS_PASSES) {
+      if (item.quality > ZERO && item.name != SULFURAS_HAND) {
+        item.quality = item.quality - ONE
+      }
+    } else {
+      if (item.quality < QUALITY_BOUND) {
+        item.quality = item.quality + ONE
+
+        if (item.name == BCKS_PASSES) {
+          if (item.sellIn < ELEVEN && item.quality < QUALITY_BOUND) {
+            item.quality = item.quality + ONE
+          }
+
+          if (item.sellIn < SIX && item.quality < QUALITY_BOUND) {
+            item.quality = item.quality + ONE
           }
         }
       }
