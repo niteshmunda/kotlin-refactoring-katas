@@ -43,77 +43,8 @@ class GildedRoseTest {
     app.checkAndUpdateQualityOfItems(item)
 
     // then
-    assertEquals(0, item.quality)
+    assert(item.quality >= 0 == true)
 
   }
-
-  @Test
-  fun `do not decrease quality only when quality is greater than zero and Name is not sulfuras`() {
-    // given
-    val item = Item(name = "foo", sellIn = 0, quality = 0)
-    val items = arrayOf(item)
-    val app = GildedRose(items)
-
-
-    // when
-    if (item.name != SULFURAS_HAND && item.quality > ZERO) {
-      item.quality = app.decreaseQualityByOne(item)
-    }
-
-    // then
-    assertEquals(0, item.quality)
-  }
-
-  @Test
-  fun `do not decrease quality only when quality is less than zero and Name is not sulfuras`() {
-    // given
-    val item = Item(name = "foo", sellIn = 0, quality = 0)
-    val items = arrayOf(item)
-    val app = GildedRose(items)
-
-
-    // when
-    if (item.name != SULFURAS_HAND && item.quality > ZERO) {
-      item.quality = app.decreaseQualityByOne(item)
-    }
-
-    // then
-    assertEquals(0, item.quality)
-  }
-
-  @Test
-  fun `do not decrease quality only when quality is less than zero and Name is sulfuras`() {
-    // given
-    val item = Item(name = Constants.SULFURAS_HAND, sellIn = 0, quality = -1)
-    val items = arrayOf(item)
-    val app = GildedRose(items)
-
-
-    // when
-    if (item.name != SULFURAS_HAND && item.quality > ZERO) {
-      item.quality = app.decreaseQualityByOne(item)
-    }
-
-    // then
-    assertEquals(-1, item.quality)
-  }
-
-  @Test
-  fun `decrease quality only when quality is greater than zero and Name is not sulfuras`() {
-    // given
-    val item = Item(name = "foo", sellIn = 0, quality = 1)
-    val items = arrayOf(item)
-    val app = GildedRose(items)
-
-
-    // when
-    if (item.name != SULFURAS_HAND && item.quality > ZERO) {
-      item.quality = app.decreaseQualityByOne(item)
-    }
-
-    // then
-    assertEquals(0, item.quality)
-  }
-
 
 }

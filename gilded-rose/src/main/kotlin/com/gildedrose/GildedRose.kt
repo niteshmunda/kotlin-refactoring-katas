@@ -46,11 +46,9 @@ class GildedRose(var items: Array<Item>) {
   }
 
   fun checkAndUpdateQualityOfItems(item: Item) {
-    if (item.name != AGED_BRIE && item.name != BCKS_PASSES) {
-      if (item.name != SULFURAS_HAND) {
-        if (item.quality > ZERO) {
-          item.quality = decreaseQualityByOne(item)
-        }
+    if (item.name != AGED_BRIE && item.name != BCKS_PASSES && item.name != SULFURAS_HAND) {
+      if (item.quality > ZERO) {
+        item.quality = decreaseQualityByOne(item)
       }
     } else {
       if (item.quality < QUALITY_BOUND) {
