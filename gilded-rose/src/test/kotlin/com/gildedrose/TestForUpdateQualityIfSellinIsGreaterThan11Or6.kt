@@ -20,9 +20,9 @@ class TestForUpdateQualityIfSellinIsGreaterThan11Or6 {
   }
 
   @Test
-  fun `when sell in is less than eleven and also less than six than increase the quality by 2`() {
+  fun `when sellin is less than eleven and also less than six than increase the quality by 2`() {
     // given
-    val quality = Constants.QUALITY_BOUND -1
+    val quality = Constants.QUALITY_BOUND - 2
     val item = Item(name = Constants.SULFURAS_HAND, sellIn = 0, quality = quality)
     val items = arrayOf(item)
     val app = GildedRose(items)

@@ -13,11 +13,28 @@ class GildedRose(var items: Array<Item>) {
 
   fun updateQuality() {
     items.forEach { item ->
-      checkAndUpdateQualityOfItems(item)
+
+      checkAndUpdateQualityOfItems2(item)
+
+//      checkAndUpdateQualityOfItems(item)
 
       updateSellin(item)
 
       updateQualityIfSellInIsLessThanZero(item)
+    }
+  }
+
+  fun checkAndUpdateQualityOfItems2(item: Item) {
+    if (item.name != AGED_BRIE && item.name != BCKS_PASSES) {
+      if (item.quality > ZERO) {
+        if (item.name != SULFURAS_HAND) {
+          item.quality = decreaseQualityByOne(item)
+        }
+      }
+    } else {
+      if (item.quality >= QUALITY_BOUND) return
+
+      updateQuantityOnCertainCondition(item)
     }
   }
 
@@ -47,18 +64,18 @@ class GildedRose(var items: Array<Item>) {
       item.sellIn = decreaseSellIn(item)
     }
   }
-
-  fun checkAndUpdateQualityOfItems(item: Item) {
-    if (item.name == AGED_BRIE || item.name == BCKS_PASSES || item.name == SULFURAS_HAND) {
-      if (item.quality >= QUALITY_BOUND) return
-
-      updateQuantityOnCertainCondition(item)
-    } else {
-      if (item.quality > ZERO) {
-        item.quality = decreaseQualityByOne(item)
-      }
-    }
-  }
+//
+//  fun checkAndUpdateQualityOfItems(item: Item) {
+//    if (item.name == AGED_BRIE || item.name == BCKS_PASSES) {
+//      if (item.quality >= QUALITY_BOUND) return
+//
+//      updateQuantityOnCertainCondition(item)
+//    } else {
+//      if (item.quality > ZERO) {
+//        item.quality = decreaseQualityByOne(item)
+//      }
+//    }
+//  }
 
   fun updateQuantityOnCertainCondition(item: Item) {
     item.quality = increaseQualityByOne(item)
@@ -69,22 +86,24 @@ class GildedRose(var items: Array<Item>) {
   }
 
   fun updateQualityIfSellinIsGreaterThan11Or6(item: Item) {
-    if (item.quality < QUALITY_BOUND) {
-      if (item.sellIn < ELEVEN) {
+    if (item.sellIn < ELEVEN) {
+      if (item.quality < QUALITY_BOUND) {
         item.quality = increaseQualityByOne(item)
       }
+    }
 
-      if (item.sellIn < SIX) {
+    if (item.sellIn < SIX) {
+      if (item.quality < QUALITY_BOUND) {
         item.quality = increaseQualityByOne(item)
       }
     }
   }
 
-  fun increaseQualityByOne(item: Item) = item.quality + ONE
+  fun increaseQualityByOne(item: Item): Int = item.quality + ONE
 
-  fun decreaseQualityByOne(item: Item) = item.quality - ONE
+  fun decreaseQualityByOne(item: Item): Int = item.quality - ONE
 
-  fun decreaseQualityBySomeValue(item: Item) = item.quality - item.quality
+  fun decreaseQualityBySomeValue(item: Item): Int = item.quality - item.quality
 
-  fun decreaseSellIn(item: Item) = item.sellIn - ONE
+  fun decreaseSellIn(item: Item): Int = item.sellIn - ONE
 }

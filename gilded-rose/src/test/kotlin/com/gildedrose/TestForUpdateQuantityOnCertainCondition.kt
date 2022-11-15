@@ -22,7 +22,7 @@ class TestForUpdateQuantityOnCertainCondition {
   @Test
   fun `when item name is BCKS_PASSES then increment the quality when conditions for updateQualityIfSellinIsGreaterThan11Or6 are met`() {
     // given
-    val quality = Constants.QUALITY_BOUND -2
+    val quality = Constants.QUALITY_BOUND - 3
     val item = Item(name = Constants.BCKS_PASSES, sellIn = 0, quality = quality)
     val items = arrayOf(item)
     val app = GildedRose(items)
