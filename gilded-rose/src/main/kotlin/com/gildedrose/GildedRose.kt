@@ -21,21 +21,24 @@ class GildedRose(var items: Array<Item>) {
     }
   }
 
-  private fun updateQualityIfSellInIsLessThanZero(item: Item) {
-    if (item.sellIn < ZERO) {
-      if (item.name == AGED_BRIE) {
-        if (item.quality < QUALITY_BOUND) {
-          item.quality = increaseQualityByOne(item)
-        }
-      } else {
-        if (item.name != BCKS_PASSES) {
-          if (item.name != SULFURAS_HAND && item.quality > ZERO) {
-            item.quality = decreaseQualityByOne(item)
-          }
-        } else {
-          item.quality = decreaseQualityBySomeValue(item)
-        }
+  fun updateQualityIfSellInIsLessThanZero(item: Item) {
+    if (item.sellIn >= ZERO) return
+    if (item.name != AGED_BRIE) {
+      updateQualityBasedOnBCKS_PASSES(item)
+    } else {
+      if (item.quality < QUALITY_BOUND) {
+        item.quality = increaseQualityByOne(item)
       }
+    }
+  }
+
+  fun updateQualityBasedOnBCKS_PASSES(item: Item) {
+    if (item.name != BCKS_PASSES) {
+      if (item.name != SULFURAS_HAND && item.quality > ZERO) {
+        item.quality = decreaseQualityByOne(item)
+      }
+    } else {
+      item.quality = decreaseQualityBySomeValue(item)
     }
   }
 
@@ -46,23 +49,33 @@ class GildedRose(var items: Array<Item>) {
   }
 
   fun checkAndUpdateQualityOfItems(item: Item) {
-    if (item.name != AGED_BRIE && item.name != BCKS_PASSES && item.name != SULFURAS_HAND) {
+    if (item.name == AGED_BRIE || item.name == BCKS_PASSES || item.name == SULFURAS_HAND) {
+      if (item.quality >= QUALITY_BOUND) return
+
+      updateQuantityOnCertainCondition(item)
+    } else {
       if (item.quality > ZERO) {
         item.quality = decreaseQualityByOne(item)
       }
-    } else {
-      if (item.quality < QUALITY_BOUND) {
+    }
+  }
+
+  fun updateQuantityOnCertainCondition(item: Item) {
+    item.quality = increaseQualityByOne(item)
+
+    if (item.name != BCKS_PASSES) return
+
+    updateQualityIfSellinIsGreaterThan11Or6(item)
+  }
+
+  fun updateQualityIfSellinIsGreaterThan11Or6(item: Item) {
+    if (item.quality < QUALITY_BOUND) {
+      if (item.sellIn < ELEVEN) {
         item.quality = increaseQualityByOne(item)
+      }
 
-        if (item.name == BCKS_PASSES) {
-          if (item.sellIn < ELEVEN && item.quality < QUALITY_BOUND) {
-            item.quality = increaseQualityByOne(item)
-          }
-
-          if (item.sellIn < SIX && item.quality < QUALITY_BOUND) {
-            item.quality = increaseQualityByOne(item)
-          }
-        }
+      if (item.sellIn < SIX) {
+        item.quality = increaseQualityByOne(item)
       }
     }
   }
