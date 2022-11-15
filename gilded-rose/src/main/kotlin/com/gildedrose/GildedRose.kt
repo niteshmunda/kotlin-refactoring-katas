@@ -23,16 +23,12 @@ class GildedRose(var items: Array<Item>) {
           items[i].quality = items[i].quality + ONE
 
           if (items[i].name == BCKS_PASSES) {
-            if (items[i].sellIn < ELEVEN) {
-              if (items[i].quality < QUALITY_BOUND) {
-                items[i].quality = items[i].quality + ONE
-              }
+            if (items[i].sellIn < ELEVEN && items[i].quality < QUALITY_BOUND) {
+              items[i].quality = items[i].quality + ONE
             }
 
-            if (items[i].sellIn < SIX) {
-              if (items[i].quality < QUALITY_BOUND) {
-                items[i].quality = items[i].quality + ONE
-              }
+            if (items[i].sellIn < SIX && items[i].quality < QUALITY_BOUND) {
+              items[i].quality = items[i].quality + ONE
             }
           }
         }
