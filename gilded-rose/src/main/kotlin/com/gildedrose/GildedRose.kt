@@ -11,6 +11,8 @@ import com.gildedrose.Constants.SULFURAS_HAND_OF_RAGNAROS
 
 class GildedRose(private var items: Array<Item>) {
 
+  private val gildedRoseLogic = GildedRoseLogic
+
   fun updateQuality() {
     items.forEach { item ->
       checkAndUpdateQualityOfItems(item)
