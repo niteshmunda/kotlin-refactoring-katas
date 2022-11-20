@@ -1,57 +1,52 @@
 package com.gildedrose
 
 import com.gildedrose.Constants.AGED_BRIE
-import com.gildedrose.Constants.BCKS_PASSES
-import com.gildedrose.Constants.ELEVEN
-import com.gildedrose.Constants.ONE
-import com.gildedrose.Constants.QUALITY_BOUND
-import com.gildedrose.Constants.SIX
-import com.gildedrose.Constants.SULFURAS_HAND
-import com.gildedrose.Constants.ZERO
+import com.gildedrose.Constants.BACKSTAGE_PASSES
+import com.gildedrose.Constants.QUALITY_CONSTANT_ELEVEN
+import com.gildedrose.Constants.QUALITY_CONSTANT_ONE
+import com.gildedrose.Constants.QUALITY_CONSTANT_SIX
+import com.gildedrose.Constants.QUALITY_LOWER_BOUND
+import com.gildedrose.Constants.QUALITY_UPPER_BOUND
+import com.gildedrose.Constants.SULFURAS_HAND_OF_RAGNAROS
 
-class GildedRose(var items: Array<Item>) {
+class GildedRose(private var items: Array<Item>) {
 
   fun updateQuality() {
     items.forEach { item ->
-
-      checkAndUpdateQualityOfItems2(item)
-
-//      checkAndUpdateQualityOfItems(item)
-
+      checkAndUpdateQualityOfItems(item)
       updateSellin(item)
-
       updateQualityIfSellInIsLessThanZero(item)
     }
   }
 
-  fun checkAndUpdateQualityOfItems2(item: Item) {
-    if (item.name != AGED_BRIE && item.name != BCKS_PASSES) {
-      if (item.quality > ZERO) {
-        if (item.name != SULFURAS_HAND) {
+  fun checkAndUpdateQualityOfItems(item: Item) {
+    if (item.name != AGED_BRIE && item.name != BACKSTAGE_PASSES) {
+      if (item.quality > QUALITY_LOWER_BOUND) {
+        if (item.name != SULFURAS_HAND_OF_RAGNAROS) {
           item.quality = decreaseQualityByOne(item)
         }
       }
     } else {
-      if (item.quality >= QUALITY_BOUND) return
+      if (item.quality >= QUALITY_UPPER_BOUND) return
 
       updateQuantityOnCertainCondition(item)
     }
   }
 
   fun updateQualityIfSellInIsLessThanZero(item: Item) {
-    if (item.sellIn >= ZERO) return
+    if (item.sellIn >= QUALITY_LOWER_BOUND) return
     if (item.name != AGED_BRIE) {
-      updateQualityBasedOnBCKS_PASSES(item)
+      updateQualityBasedOnBCKSPASSES(item)
     } else {
-      if (item.quality < QUALITY_BOUND) {
+      if (item.quality < QUALITY_UPPER_BOUND) {
         item.quality = increaseQualityByOne(item)
       }
     }
   }
 
-  fun updateQualityBasedOnBCKS_PASSES(item: Item) {
-    if (item.name != BCKS_PASSES) {
-      if (item.name != SULFURAS_HAND && item.quality > ZERO) {
+  fun updateQualityBasedOnBCKSPASSES(item: Item) {
+    if (item.name != BACKSTAGE_PASSES) {
+      if (item.name != SULFURAS_HAND_OF_RAGNAROS && item.quality > QUALITY_LOWER_BOUND) {
         item.quality = decreaseQualityByOne(item)
       }
     } else {
@@ -60,50 +55,46 @@ class GildedRose(var items: Array<Item>) {
   }
 
   fun updateSellin(item: Item) {
-    if (item.name != SULFURAS_HAND) {
+    if (item.name != SULFURAS_HAND_OF_RAGNAROS) {
       item.sellIn = decreaseSellIn(item)
     }
   }
-//
-//  fun checkAndUpdateQualityOfItems(item: Item) {
-//    if (item.name == AGED_BRIE || item.name == BCKS_PASSES) {
-//      if (item.quality >= QUALITY_BOUND) return
-//
-//      updateQuantityOnCertainCondition(item)
-//    } else {
-//      if (item.quality > ZERO) {
-//        item.quality = decreaseQualityByOne(item)
-//      }
-//    }
-//  }
 
   fun updateQuantityOnCertainCondition(item: Item) {
     item.quality = increaseQualityByOne(item)
 
-    if (item.name != BCKS_PASSES) return
+    if (item.name != BACKSTAGE_PASSES) return
 
     updateQualityIfSellinIsGreaterThan11Or6(item)
   }
 
   fun updateQualityIfSellinIsGreaterThan11Or6(item: Item) {
-    if (item.sellIn < ELEVEN) {
-      if (item.quality < QUALITY_BOUND) {
+    if (item.sellIn < QUALITY_CONSTANT_ELEVEN) {
+      if (item.quality < QUALITY_UPPER_BOUND) {
         item.quality = increaseQualityByOne(item)
       }
     }
 
-    if (item.sellIn < SIX) {
-      if (item.quality < QUALITY_BOUND) {
+    if (item.sellIn < QUALITY_CONSTANT_SIX) {
+      if (item.quality < QUALITY_UPPER_BOUND) {
         item.quality = increaseQualityByOne(item)
       }
     }
   }
 
-  fun increaseQualityByOne(item: Item): Int = item.quality + ONE
+  private fun increaseQualityByOne(item: Item): Int {
+    return item.quality + QUALITY_CONSTANT_ONE
+  }
 
-  fun decreaseQualityByOne(item: Item): Int = item.quality - ONE
+  private fun decreaseQualityByOne(item: Item): Int {
+    return item.quality - QUALITY_CONSTANT_ONE
+  }
 
-  fun decreaseQualityBySomeValue(item: Item): Int = item.quality - item.quality
+  private fun decreaseQualityBySomeValue(item: Item): Int {
+    return 0
+  }
 
-  fun decreaseSellIn(item: Item): Int = item.sellIn - ONE
+  private fun decreaseSellIn(item: Item): Int {
+    return item.sellIn - QUALITY_CONSTANT_ONE
+  }
 }

@@ -18,7 +18,7 @@ class GildedRoseTest {
     fun `when item name is not SULFURAS_HAND, then decrease sellIn value`() {
       // given
       val sellIn = 3
-      val item = Item(name = Constants.AGED_BRIE, sellIn = sellIn, quality = Constants.QUALITY_BOUND)
+      val item = Item(name = Constants.AGED_BRIE, sellIn = sellIn, quality = Constants.QUALITY_UPPER_BOUND)
       val items = arrayOf(item)
       val app = GildedRose(items)
 
