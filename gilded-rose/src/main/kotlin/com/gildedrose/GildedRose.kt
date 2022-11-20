@@ -60,10 +60,11 @@ class GildedRose(var items: Array<Item>) {
 
   fun updateQuantityOnCertainCondition(item: Item) {
     item.quality = increaseQualityByOne(item)
-
-    if (item.name != BACKSTAGE_PASSES) return
-
-    updateQualityIfSellinIsGreaterThan11Or6(item)
+    if (item.name == BACKSTAGE_PASSES) {
+      updateQualityIfSellinIsGreaterThan11Or6(item)
+    } else {
+      //no-op
+    }
   }
 
   fun updateQualityIfSellinIsGreaterThan11Or6(item: Item) {
