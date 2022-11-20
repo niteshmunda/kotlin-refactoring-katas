@@ -36,4 +36,7 @@ open class Item(var name: String, var sellIn: Int, var quality: Int) {
       0
     }
   }
+  fun sellInBelowLowerBound(): Boolean {
+    return sellIn < QUALITY_AND_SELLIN_LOWER_BOUND
+  }
 }
