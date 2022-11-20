@@ -3,85 +3,103 @@ package com.gildedrose
 import com.gildedrose.Constants.AGED_BRIE
 import com.gildedrose.Constants.BACKSTAGE_PASSES
 import com.gildedrose.Constants.QUALITY_CONSTANT_ONE
-import com.gildedrose.Constants.QUALITY_UPPER_BOUND
 import com.gildedrose.Constants.SULFURAS_HAND_OF_RAGNAROS
 
 class GildedRose(var items: Array<Item>) {
   fun updateQuality(items: Array<Item>) {
     items.forEach { item ->
-      when {
-        item.name == AGED_BRIE -> {
-          when(Item.getSellinRange(item.sellIn)) {
-            Item.Companion.SellInRanges.BelowLowerBound -> {
-              if (item.quality < QUALITY_UPPER_BOUND) {
-                item.quality = increaseQualityByOne(item)
-              }
-            }
-            else -> {
-              // no-op
-            }
-          }
+      // name check
+      when(item.name) {
+        AGED_BRIE -> {
+          // sellin check
+          sellInCheck(
+            item = item,
+            onBelowLowerBound = {
+              // quality check
+              qualityCheck(
+                item = item,
+                onAboveLowerBound = {},
+                onBelowUpperBound = { item.quality = increaseQualityByOne(item) }
+              )
+            },
+            onElse = {}
+          )
         }
 
-        item.name == BACKSTAGE_PASSES -> {
-
-          when(Item.getQualityRange(item.quality)) {
-            Item.Companion.QualityRange.AboveLowerBound -> {
-              // no-op
-            }
-            Item.Companion.QualityRange.BelowUpperBound -> {
+        BACKSTAGE_PASSES -> {
+          // quality check
+          qualityCheck(
+            item = item,
+            onAboveLowerBound = {},
+            onBelowUpperBound = {
               item.quality = increaseQualityByOne(item)
               item.quality = item.increaseQuality()
             }
-          }
+          )
 
-          when(Item.getSellinRange(item.sellIn)) {
-            Item.Companion.SellInRanges.BelowLowerBound -> {
-              item.quality = decreaseQualityBySomeValue(item)
-            }
-            else -> {
-              // no-op
-            }
-          }
+          // sell in check
+          sellInCheck(
+            item = item,
+            onBelowLowerBound = { item.quality = decreaseQualityBySomeValue(item) },
+            onElse = {}
+          )
         }
 
-        item.name == SULFURAS_HAND_OF_RAGNAROS -> {
-          when(Item.getQualityRange(item.quality)) {
-            Item.Companion.QualityRange.AboveLowerBound -> {
-              // no-op
-            }
-            Item.Companion.QualityRange.BelowUpperBound -> {
+        SULFURAS_HAND_OF_RAGNAROS -> {
+          // quality check
+          qualityCheck(
+            item = item,
+            onAboveLowerBound = {},
+            onBelowUpperBound = {
               item.quality = increaseQualityByOne(item)
               item.quality = item.increaseQuality()
             }
-          }
-          if (item.name != SULFURAS_HAND_OF_RAGNAROS) {
-            item.sellIn = decreaseSellIn(item)
-          }
+          )
         }
 
-        item.nameInConcertRegistry(item.name).not() -> {
+        else -> {
+          // quality check
+          qualityCheck(
+            item = item,
+            onAboveLowerBound = { item.quality = decreaseQualityByOne(item) },
+            onBelowUpperBound = {}
+          )
 
-          when(Item.getQualityRange(item.quality)) {
-            Item.Companion.QualityRange.AboveLowerBound -> {
-              item.quality = decreaseQualityByOne(item)
-            }
-            Item.Companion.QualityRange.BelowUpperBound -> {
-              // no-op
-            }
-          }
-
-          when(Item.getSellinRange(item.sellIn)) {
-            Item.Companion.SellInRanges.BelowLowerBound -> {
+          // sellin check
+          sellInCheck(
+            item = item,
+            onBelowLowerBound = {
               if (item.qualityAboveLowerBound(item.quality)) {
                 item.quality = decreaseQualityByOne(item)
               }
-            }
-            else -> {
-              // no-op
-            }
-          }
+            },
+            onElse = {}
+          )
         }
+      }
+    }
+  }
+
+  private fun sellInCheck(item: Item, onBelowLowerBound: () -> Unit, onElse: () -> Unit) {
+    when (Item.getSellinRange(item.sellIn)) {
+      Item.Companion.SellInRanges.BelowLowerBound -> {
+        onBelowLowerBound.invoke()
+      }
+
+      else -> {
+        onElse.invoke()
+      }
+    }
+  }
+
+  private fun qualityCheck(item: Item, onAboveLowerBound: () -> Unit, onBelowUpperBound: () -> Unit) {
+    when (Item.getQualityRange(item.quality)) {
+      Item.Companion.QualityRange.AboveLowerBound -> {
+        onAboveLowerBound.invoke()
+      }
+
+      Item.Companion.QualityRange.BelowUpperBound -> {
+        onBelowUpperBound.invoke()
       }
     }
   }
