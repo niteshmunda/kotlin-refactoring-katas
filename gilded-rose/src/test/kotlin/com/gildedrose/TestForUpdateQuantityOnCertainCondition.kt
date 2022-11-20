@@ -32,6 +32,6 @@ class TestForUpdateQuantityOnCertainCondition {
     app.updateQuantityOnCertainCondition(item)
 
     // then
-      Assertions.assertEquals(quality + 3, item.quality)
+    Assertions.assertEquals(quality + 3, item.quality)
   }
 }

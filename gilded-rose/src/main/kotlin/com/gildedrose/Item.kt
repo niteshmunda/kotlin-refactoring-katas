@@ -3,6 +3,9 @@ package com.gildedrose
 import com.gildedrose.Constants.AGED_BRIE
 import com.gildedrose.Constants.BACKSTAGE_PASSES
 import com.gildedrose.Constants.QUALITY_AND_SELLIN_LOWER_BOUND
+import com.gildedrose.Constants.QUALITY_CONSTANT_ELEVEN
+import com.gildedrose.Constants.QUALITY_CONSTANT_SIX
+import com.gildedrose.Constants.QUALITY_UPPER_BOUND
 import com.gildedrose.Constants.SULFURAS_HAND_OF_RAGNAROS
 
 open class Item(var name: String, var sellIn: Int, var quality: Int) {
@@ -18,5 +21,19 @@ open class Item(var name: String, var sellIn: Int, var quality: Int) {
 
   fun qualityAboveLowerBound(quality: Int) : Boolean {
     return quality > QUALITY_AND_SELLIN_LOWER_BOUND
+  }
+
+  fun qualityBelowUpperBound() : Boolean {
+    return quality < QUALITY_UPPER_BOUND
+  }
+
+  fun increaseQuality(): Int {
+    return quality + if (sellIn < QUALITY_CONSTANT_SIX) {
+      2
+    } else if (sellIn in (QUALITY_CONSTANT_SIX + 1) until QUALITY_CONSTANT_ELEVEN) {
+      1
+    } else {
+      0
+    }
   }
 }

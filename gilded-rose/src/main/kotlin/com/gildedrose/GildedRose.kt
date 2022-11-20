@@ -68,13 +68,8 @@ class GildedRose(var items: Array<Item>) {
   }
 
   fun updateQualityIfSellinIsGreaterThan11Or6(item: Item) {
-    if (item.quality < QUALITY_UPPER_BOUND) {
-      if (item.sellIn < QUALITY_CONSTANT_ELEVEN) {
-        item.quality = increaseQualityByOne(item)
-      }
-      if (item.sellIn < QUALITY_CONSTANT_SIX) {
-        item.quality = increaseQualityByOne(item)
-      }
+    if (item.qualityBelowUpperBound()) {
+      item.quality = item.increaseQuality()
     }
   }
 
