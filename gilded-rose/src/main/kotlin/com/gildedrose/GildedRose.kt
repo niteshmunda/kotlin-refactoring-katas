@@ -9,7 +9,7 @@ import com.gildedrose.Constants.QUALITY_AND_SELLIN_LOWER_BOUND
 import com.gildedrose.Constants.QUALITY_UPPER_BOUND
 import com.gildedrose.Constants.SULFURAS_HAND_OF_RAGNAROS
 
-class GildedRose(private var items: Array<Item>) {
+class GildedRose(var items: Array<Item>) {
 
   private val gildedRoseLogic = GildedRoseLogic
 
@@ -22,11 +22,9 @@ class GildedRose(private var items: Array<Item>) {
   }
 
   fun checkAndUpdateQualityOfItems(item: Item) {
-    if (item.name != AGED_BRIE && item.name != BACKSTAGE_PASSES) {
+    if (item.nameInConcertRegistry(item.name).not()) {
       if (item.quality > QUALITY_AND_SELLIN_LOWER_BOUND) {
-        if (item.name != SULFURAS_HAND_OF_RAGNAROS) {
-          item.quality = decreaseQualityByOne(item)
-        }
+        item.quality = decreaseQualityByOne(item)
       }
     } else {
       if (item.quality >= QUALITY_UPPER_BOUND) return
