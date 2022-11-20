@@ -9,75 +9,84 @@ class GildedRose(var items: Array<Item>) {
   fun updateQuality(items: Array<Item>) {
     items.forEach { item ->
       // name check
-      when(item.name) {
-        AGED_BRIE -> {
-          // sellin check
-          sellInCheck(
-            item = item,
-            onBelowLowerBound = {
-              // quality check
-              qualityCheck(
-                item = item,
-                onAboveLowerBound = {},
-                onBelowUpperBound = { item.quality = increaseQualityByOne(item) }
-              )
-            },
-            onElse = {}
-          )
-        }
+      val output = fwdUpdateInformation(item)
+      item.name = output.name
+      item.quality = output.quality
+      item.sellIn = output.sellIn
+    }
+  }
 
-        BACKSTAGE_PASSES -> {
-          // quality check
-          qualityCheck(
-            item = item,
-            onAboveLowerBound = {},
-            onBelowUpperBound = {
-              item.quality = increaseQualityByOne(item)
-              item.quality = item.increaseQuality()
+  fun fwdUpdateInformation(item: Item) : Item {
+    when (item.name) {
+      AGED_BRIE -> {
+        // sellin check
+        sellInCheck(
+          item = item,
+          onBelowLowerBound = {
+            // quality check
+            qualityCheck(
+              item = item,
+              onAboveLowerBound = {},
+              onBelowUpperBound = { item.quality = increaseQualityByOne(item) }
+            )
+          },
+          onElse = {}
+        )
+      }
+
+      BACKSTAGE_PASSES -> {
+        // quality check
+        qualityCheck(
+          item = item,
+          onAboveLowerBound = {},
+          onBelowUpperBound = {
+            item.quality = increaseQualityByOne(item)
+            item.quality = item.increaseQuality()
+          }
+        )
+
+        // sell in check
+        sellInCheck(
+          item = item,
+          onBelowLowerBound = { item.quality = decreaseQualityBySomeValue(item) },
+          onElse = {}
+        )
+      }
+
+      SULFURAS_HAND_OF_RAGNAROS -> {
+        // quality check
+        qualityCheck(
+          item = item,
+          onAboveLowerBound = {},
+          onBelowUpperBound = {
+            item.quality = increaseQualityByOne(item)
+            item.quality = item.increaseQuality()
+          }
+        )
+      }
+
+      else -> {
+        // quality check
+        qualityCheck(
+          item = item,
+          onAboveLowerBound = { item.quality = decreaseQualityByOne(item) },
+          onBelowUpperBound = {}
+        )
+
+        // sellin check
+        sellInCheck(
+          item = item,
+          onBelowLowerBound = {
+            if (item.qualityAboveLowerBound(item.quality)) {
+              item.quality = decreaseQualityByOne(item)
             }
-          )
-
-          // sell in check
-          sellInCheck(
-            item = item,
-            onBelowLowerBound = { item.quality = decreaseQualityBySomeValue(item) },
-            onElse = {}
-          )
-        }
-
-        SULFURAS_HAND_OF_RAGNAROS -> {
-          // quality check
-          qualityCheck(
-            item = item,
-            onAboveLowerBound = {},
-            onBelowUpperBound = {
-              item.quality = increaseQualityByOne(item)
-              item.quality = item.increaseQuality()
-            }
-          )
-        }
-
-        else -> {
-          // quality check
-          qualityCheck(
-            item = item,
-            onAboveLowerBound = { item.quality = decreaseQualityByOne(item) },
-            onBelowUpperBound = {}
-          )
-
-          // sellin check
-          sellInCheck(
-            item = item,
-            onBelowLowerBound = {
-              if (item.qualityAboveLowerBound(item.quality)) {
-                item.quality = decreaseQualityByOne(item)
-              }
-            },
-            onElse = {}
-          )
-        }
+          },
+          onElse = {}
+        )
       }
     }
+
+    return item
   }
 
   private fun sellInCheck(item: Item, onBelowLowerBound: () -> Unit, onElse: () -> Unit) {
