@@ -13,10 +13,12 @@ class TestForUpdateQualityIfSellinIsGreaterThan11Or6 {
 
 
     // when
-    app.updateQualityIfSellinIsGreaterThan11Or6(item)
+    if (item.qualityBelowUpperBound()) {
+      item.quality = item.increaseQuality()
+    }
 
     // then
-      Assertions.assertEquals(item, item)
+    Assertions.assertEquals(item, item)
   }
 
   @Test
@@ -29,10 +31,12 @@ class TestForUpdateQualityIfSellinIsGreaterThan11Or6 {
 
 
     // when
-    app.updateQualityIfSellinIsGreaterThan11Or6(item)
+    if (item.qualityBelowUpperBound()) {
+      item.quality = item.increaseQuality()
+    }
 
     // then
-      Assertions.assertEquals(quality + 2, item.quality)
+    Assertions.assertEquals(quality + 2, item.quality)
   }
 
   @Test
@@ -45,25 +49,29 @@ class TestForUpdateQualityIfSellinIsGreaterThan11Or6 {
 
 
     // when
-    app.updateQualityIfSellinIsGreaterThan11Or6(item)
+    if (item.qualityBelowUpperBound()) {
+      item.quality = item.increaseQuality()
+    }
 
     // then
-      Assertions.assertEquals(quality + 1, item.quality)
+    Assertions.assertEquals(quality + 1, item.quality)
   }
 
   @Test
   fun `when sell in is greater than eleven and also greater than six than no change`() {
     // given
-    val quality = Constants.QUALITY_UPPER_BOUND -1
+    val quality = Constants.QUALITY_UPPER_BOUND - 1
     val item = Item(name = Constants.SULFURAS_HAND_OF_RAGNAROS, sellIn = 14, quality = quality)
     val items = arrayOf(item)
     val app = GildedRose(items)
 
 
     // when
-    app.updateQualityIfSellinIsGreaterThan11Or6(item)
+    if (item.qualityBelowUpperBound()) {
+      item.quality = item.increaseQuality()
+    }
 
     // then
-      Assertions.assertEquals(quality, item.quality)
+    Assertions.assertEquals(quality, item.quality)
   }
 }

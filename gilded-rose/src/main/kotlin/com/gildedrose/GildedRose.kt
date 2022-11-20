@@ -23,10 +23,12 @@ class GildedRose(var items: Array<Item>) {
     if (item.nameInConcertRegistry(item.name).not() && item.qualityAboveLowerBound(item.quality)) {
       item.quality = decreaseQualityByOne(item)
     } else {
-      if (item.quality < QUALITY_UPPER_BOUND) {
+      if (item.qualityBelowUpperBound()) {
         item.quality = increaseQualityByOne(item)
         if (item.name == BACKSTAGE_PASSES) {
-          updateQualityIfSellinIsGreaterThan11Or6(item)
+          if (item.qualityBelowUpperBound()) {
+            item.quality = item.increaseQuality()
+          }
         }
       }
     }
@@ -56,12 +58,6 @@ class GildedRose(var items: Array<Item>) {
   fun updateSellin(item: Item) {
     if (item.name != SULFURAS_HAND_OF_RAGNAROS) {
       item.sellIn = decreaseSellIn(item)
-    }
-  }
-
-  fun updateQualityIfSellinIsGreaterThan11Or6(item: Item) {
-    if (item.qualityBelowUpperBound()) {
-      item.quality = item.increaseQuality()
     }
   }
 
