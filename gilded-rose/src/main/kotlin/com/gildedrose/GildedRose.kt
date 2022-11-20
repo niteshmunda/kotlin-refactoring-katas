@@ -14,7 +14,6 @@ class GildedRose(var items: Array<Item>) {
   fun updateQuality() {
     items.forEach { item ->
       checkAndUpdateQualityOfItems(item)
-      updateSellin(item)
       updateQualityIfSellInIsLessThanZero(item)
     }
   }
@@ -37,9 +36,10 @@ class GildedRose(var items: Array<Item>) {
       else -> {
         if (item.qualityBelowUpperBound()) {
           item.quality = increaseQualityByOne(item)
-          if (item.qualityBelowUpperBound()) {
-            item.quality = item.increaseQuality()
-          }
+          item.quality = item.increaseQuality()
+        }
+        if (item.name != SULFURAS_HAND_OF_RAGNAROS) {
+          item.sellIn = decreaseSellIn(item)
         }
       }
     }
@@ -63,12 +63,6 @@ class GildedRose(var items: Array<Item>) {
       }
     } else {
       item.quality = decreaseQualityBySomeValue(item)
-    }
-  }
-
-  fun updateSellin(item: Item) {
-    if (item.name != SULFURAS_HAND_OF_RAGNAROS) {
-      item.sellIn = decreaseSellIn(item)
     }
   }
 
