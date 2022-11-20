@@ -11,9 +11,14 @@ class GildedRose(var items: Array<Item>) {
     items.forEach { item ->
       when {
         item.name == AGED_BRIE -> {
-          if (item.sellInBelowLowerBound()) {
-            if (item.quality < QUALITY_UPPER_BOUND) {
-              item.quality = increaseQualityByOne(item)
+          when(Item.getSellinRange(item.sellIn)) {
+            Item.Companion.SellInRanges.BelowLowerBound -> {
+              if (item.quality < QUALITY_UPPER_BOUND) {
+                item.quality = increaseQualityByOne(item)
+              }
+            }
+            else -> {
+              // no-op
             }
           }
         }
@@ -23,8 +28,13 @@ class GildedRose(var items: Array<Item>) {
             item.quality = increaseQualityByOne(item)
             item.quality = item.increaseQuality()
           }
-          if (item.sellInBelowLowerBound()) {
-            item.quality = decreaseQualityBySomeValue(item)
+          when(Item.getSellinRange(item.sellIn)) {
+            Item.Companion.SellInRanges.BelowLowerBound -> {
+              item.quality = decreaseQualityBySomeValue(item)
+            }
+            else -> {
+              // no-op
+            }
           }
         }
 
@@ -42,9 +52,14 @@ class GildedRose(var items: Array<Item>) {
           if (item.qualityAboveLowerBound(item.quality)) {
             item.quality = decreaseQualityByOne(item)
           }
-          if (item.sellInBelowLowerBound()) {
-            if (item.qualityAboveLowerBound(item.quality)) {
-              item.quality = decreaseQualityByOne(item)
+          when(Item.getSellinRange(item.sellIn)) {
+            Item.Companion.SellInRanges.BelowLowerBound -> {
+              if (item.qualityAboveLowerBound(item.quality)) {
+                item.quality = decreaseQualityByOne(item)
+              }
+            }
+            else -> {
+              // no-op
             }
           }
         }
