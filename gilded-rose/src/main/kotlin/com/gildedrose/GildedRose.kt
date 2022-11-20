@@ -2,9 +2,7 @@ package com.gildedrose
 
 import com.gildedrose.Constants.AGED_BRIE
 import com.gildedrose.Constants.BACKSTAGE_PASSES
-import com.gildedrose.Constants.QUALITY_CONSTANT_ELEVEN
 import com.gildedrose.Constants.QUALITY_CONSTANT_ONE
-import com.gildedrose.Constants.QUALITY_CONSTANT_SIX
 import com.gildedrose.Constants.QUALITY_AND_SELLIN_LOWER_BOUND
 import com.gildedrose.Constants.QUALITY_UPPER_BOUND
 import com.gildedrose.Constants.SULFURAS_HAND_OF_RAGNAROS
@@ -26,7 +24,10 @@ class GildedRose(var items: Array<Item>) {
       item.quality = decreaseQualityByOne(item)
     } else {
       if (item.quality < QUALITY_UPPER_BOUND) {
-        updateQuantityOnCertainCondition(item)
+        item.quality = increaseQualityByOne(item)
+        if (item.name == BACKSTAGE_PASSES) {
+          updateQualityIfSellinIsGreaterThan11Or6(item)
+        }
       }
     }
   }
@@ -55,15 +56,6 @@ class GildedRose(var items: Array<Item>) {
   fun updateSellin(item: Item) {
     if (item.name != SULFURAS_HAND_OF_RAGNAROS) {
       item.sellIn = decreaseSellIn(item)
-    }
-  }
-
-  fun updateQuantityOnCertainCondition(item: Item) {
-    item.quality = increaseQualityByOne(item)
-    if (item.name == BACKSTAGE_PASSES) {
-      updateQualityIfSellinIsGreaterThan11Or6(item)
-    } else {
-      //no-op
     }
   }
 
