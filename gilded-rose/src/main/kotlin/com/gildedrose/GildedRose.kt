@@ -20,12 +20,23 @@ class GildedRose(var items: Array<Item>) {
   }
 
   fun checkAndUpdateQualityOfItems(item: Item) {
-    if (item.nameInConcertRegistry(item.name).not() && item.qualityAboveLowerBound(item.quality)) {
-      item.quality = decreaseQualityByOne(item)
-    } else {
-      if (item.qualityBelowUpperBound()) {
-        item.quality = increaseQualityByOne(item)
-        if (item.name == BACKSTAGE_PASSES) {
+    when {
+      item.nameInConcertRegistry(item.name).not() -> {
+        if (item.qualityAboveLowerBound(item.quality)) {
+          item.quality = decreaseQualityByOne(item)
+        }
+      }
+
+      item.name == BACKSTAGE_PASSES -> {
+        if (item.qualityBelowUpperBound()) {
+          item.quality = increaseQualityByOne(item)
+          item.quality = item.increaseQuality()
+        }
+      }
+
+      else -> {
+        if (item.qualityBelowUpperBound()) {
+          item.quality = increaseQualityByOne(item)
           if (item.qualityBelowUpperBound()) {
             item.quality = item.increaseQuality()
           }
