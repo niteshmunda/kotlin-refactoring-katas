@@ -24,6 +24,17 @@ open class Item(var name: String, var sellIn: Int, var quality: Int) {
         else -> SellInRanges.BetweenLowerAndUpperBound
       }
     }
+
+    enum class QualityRange {
+      AboveLowerBound, BelowUpperBound
+    }
+
+    fun getQualityRange(quality: Int) : QualityRange {
+      return when {
+        quality > QUALITY_AND_SELLIN_LOWER_BOUND -> QualityRange.AboveLowerBound
+        else -> QualityRange.BelowUpperBound
+      }
+    }
   }
 
   fun nameInConcertRegistry(name: String) : Boolean = concertRegistry.contains(name)

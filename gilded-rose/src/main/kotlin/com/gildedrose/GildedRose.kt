@@ -24,10 +24,17 @@ class GildedRose(var items: Array<Item>) {
         }
 
         item.name == BACKSTAGE_PASSES -> {
-          if (item.qualityBelowUpperBound()) {
-            item.quality = increaseQualityByOne(item)
-            item.quality = item.increaseQuality()
+
+          when(Item.getQualityRange(item.quality)) {
+            Item.Companion.QualityRange.AboveLowerBound -> {
+              // no-op
+            }
+            Item.Companion.QualityRange.BelowUpperBound -> {
+              item.quality = increaseQualityByOne(item)
+              item.quality = item.increaseQuality()
+            }
           }
+
           when(Item.getSellinRange(item.sellIn)) {
             Item.Companion.SellInRanges.BelowLowerBound -> {
               item.quality = decreaseQualityBySomeValue(item)
@@ -39,9 +46,14 @@ class GildedRose(var items: Array<Item>) {
         }
 
         item.name == SULFURAS_HAND_OF_RAGNAROS -> {
-          if (item.qualityBelowUpperBound()) {
-            item.quality = increaseQualityByOne(item)
-            item.quality = item.increaseQuality()
+          when(Item.getQualityRange(item.quality)) {
+            Item.Companion.QualityRange.AboveLowerBound -> {
+              // no-op
+            }
+            Item.Companion.QualityRange.BelowUpperBound -> {
+              item.quality = increaseQualityByOne(item)
+              item.quality = item.increaseQuality()
+            }
           }
           if (item.name != SULFURAS_HAND_OF_RAGNAROS) {
             item.sellIn = decreaseSellIn(item)
@@ -49,9 +61,16 @@ class GildedRose(var items: Array<Item>) {
         }
 
         item.nameInConcertRegistry(item.name).not() -> {
-          if (item.qualityAboveLowerBound(item.quality)) {
-            item.quality = decreaseQualityByOne(item)
+
+          when(Item.getQualityRange(item.quality)) {
+            Item.Companion.QualityRange.AboveLowerBound -> {
+              item.quality = decreaseQualityByOne(item)
+            }
+            Item.Companion.QualityRange.BelowUpperBound -> {
+              // no-op
+            }
           }
+
           when(Item.getSellinRange(item.sellIn)) {
             Item.Companion.SellInRanges.BelowLowerBound -> {
               if (item.qualityAboveLowerBound(item.quality)) {
