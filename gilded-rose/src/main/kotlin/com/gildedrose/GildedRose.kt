@@ -22,14 +22,12 @@ class GildedRose(var items: Array<Item>) {
   }
 
   fun checkAndUpdateQualityOfItems(item: Item) {
-    if (item.nameInConcertRegistry(item.name).not()) {
-      if (item.quality > QUALITY_AND_SELLIN_LOWER_BOUND) {
-        item.quality = decreaseQualityByOne(item)
-      }
+    if (item.nameInConcertRegistry(item.name).not() && item.qualityAboveLowerBound(item.quality)) {
+      item.quality = decreaseQualityByOne(item)
     } else {
-      if (item.quality >= QUALITY_UPPER_BOUND) return
-
-      updateQuantityOnCertainCondition(item)
+      if (item.quality < QUALITY_UPPER_BOUND) {
+        updateQuantityOnCertainCondition(item)
+      }
     }
   }
 
