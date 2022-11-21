@@ -11,9 +11,7 @@ class GildedRose {
     items.forEach { item ->
       // name check
       val output = fwdUpdateInformation(item)
-      with(output) {
-        returnList.add(item.copy(name = name, quality = quality, sellIn = sellIn))
-      }
+      returnList.add(item.copy(name = output.name, quality = output.quality, sellIn = output.sellIn))
     }
     return returnList
   }
