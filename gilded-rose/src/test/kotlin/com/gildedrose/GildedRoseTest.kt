@@ -5,7 +5,6 @@ import com.gildedrose.Constants.AGED_BRIE
 import com.gildedrose.Constants.BACKSTAGE_PASSES
 import com.gildedrose.Constants.SULFURAS_HAND_OF_RAGNAROS
 import org.approvaltests.Approvals
-import org.approvaltests.combinations.CombinationApprovals
 import org.approvaltests.namer.NamerFactory
 import org.approvaltests.reporters.QuietReporter
 import org.approvaltests.reporters.UseReporter
@@ -13,7 +12,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
-import org.lambda.functions.Function1
+import java.io.ByteArrayOutputStream
+import java.io.PrintStream
 
 class GildedRoseTest {
 
@@ -85,6 +85,36 @@ class GildedRoseTest {
     NamerFactory.withParameters(testName).use {
       Approvals.verify(textWriter(interactions.toString()), NamerWithoutBuildInfo())
     }
+  }
+
+  @Test
+  fun `testing using main block for 2 days`() {
+
+    // given
+    val days = "2"
+    val outputStream = ByteArrayOutputStream()
+
+    // when
+    System.setOut(PrintStream(outputStream))
+    main(arrayOf(days))
+
+    // then
+    Approvals.verify(outputStream.toString())
+  }
+
+  @Test
+  fun `testing using main block for 50 days`() {
+
+    // given
+    val days = "50"
+    val outputStream = ByteArrayOutputStream()
+
+    // when
+    System.setOut(PrintStream(outputStream))
+    main(arrayOf(days))
+
+    // then
+    Approvals.verify(outputStream.toString())
   }
 
   private fun fileName(input: Triple<String, Int, Int>): String {
