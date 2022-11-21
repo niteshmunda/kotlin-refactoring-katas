@@ -8,7 +8,7 @@ import com.gildedrose.Constants.QUALITY_CONSTANT_SIX
 import com.gildedrose.Constants.QUALITY_UPPER_BOUND
 import com.gildedrose.Constants.SULFURAS_HAND_OF_RAGNAROS
 
-open class Item(var name: String, var sellIn: Int, var quality: Int) {
+data class Item(var name: String, var sellIn: Int, var quality: Int) {
   override fun toString(): String {
     return this.name + ", " + this.sellIn + ", " + this.quality
   }

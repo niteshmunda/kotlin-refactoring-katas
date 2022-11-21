@@ -54,9 +54,9 @@ class GildedRoseTest {
   @Test
   fun foo() {
     val items = arrayOf(Item("foo", 0, 0))
-    val app = GildedRose(items)
-    app.updateQuality(items)
-    assertEquals("foo", app.items[0].name)
+    val app = GildedRose()
+    val result = app.updateQuality(items)
+    assertEquals("foo", result[0].name)
   }
 
   @ParameterizedTest
@@ -70,7 +70,7 @@ class GildedRoseTest {
     val testName = fileName(input)
 
     // when
-    val app = GildedRose(arrayOf(Item("foo", 0, 0)))// temporary for just object creation
+    val app = GildedRose()// temporary for just object creation
     val output = app.fwdUpdateInformation(Item(name,  sellin, quality))
 
     interactions.append("result(out)", output.toString())

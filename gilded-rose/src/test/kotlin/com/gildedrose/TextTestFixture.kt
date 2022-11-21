@@ -16,7 +16,7 @@ fun main(args: Array<String>) {
     Item("Conjured Mana Cake", 3, 6)
   )
 
-  val app = GildedRose(items)
+  val app = GildedRose()
 
   var days = 2
   if (args.isNotEmpty()) {

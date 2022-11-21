@@ -5,15 +5,17 @@ import com.gildedrose.Constants.BACKSTAGE_PASSES
 import com.gildedrose.Constants.QUALITY_CONSTANT_ONE
 import com.gildedrose.Constants.SULFURAS_HAND_OF_RAGNAROS
 
-class GildedRose(var items: Array<Item>) {
-  fun updateQuality(items: Array<Item>) {
+class GildedRose {
+  fun updateQuality(items: Array<Item>): List<Item> {
+    val returnList = mutableListOf<Item>()
     items.forEach { item ->
       // name check
       val output = fwdUpdateInformation(item)
-      item.name = output.name
-      item.quality = output.quality
-      item.sellIn = output.sellIn
+      with(output) {
+        returnList.add(item.copy(name = name, quality = quality, sellIn = sellIn))
+      }
     }
+    return returnList
   }
 
   fun fwdUpdateInformation(item: Item) : Item {
