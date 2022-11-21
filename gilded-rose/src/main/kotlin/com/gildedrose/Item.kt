@@ -14,7 +14,6 @@ open class Item(var name: String, var sellIn: Int, var quality: Int) {
   }
 
   companion object {
-    val concertRegistry = listOf(AGED_BRIE, BACKSTAGE_PASSES, SULFURAS_HAND_OF_RAGNAROS)
     enum class SellInRanges {
       BelowLowerBound, BetweenLowerAndUpperBound
     }
