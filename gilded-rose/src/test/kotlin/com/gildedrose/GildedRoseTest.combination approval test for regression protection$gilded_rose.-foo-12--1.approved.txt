@@ -1,0 +1,1 @@
+result(out): foo, 12, -1

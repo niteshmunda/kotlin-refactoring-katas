@@ -48,7 +48,7 @@ class GildedRose(var items: Array<Item>) {
         // sell in check
         sellInCheck(
           item = item,
-          onBelowLowerBound = { item.quality = decreaseQualityBySomeValue(item) },
+          onBelowLowerBound = { item.quality = decreaseQualityBySomeValue() },
           onElse = {}
         )
       }
@@ -113,19 +113,15 @@ class GildedRose(var items: Array<Item>) {
     }
   }
 
-  fun increaseQualityByOne(item: Item): Int {
+  private fun increaseQualityByOne(item: Item): Int {
     return item.quality + QUALITY_CONSTANT_ONE
   }
 
-  fun decreaseQualityByOne(item: Item): Int {
+  private fun decreaseQualityByOne(item: Item): Int {
     return item.quality - QUALITY_CONSTANT_ONE
   }
 
-  fun decreaseQualityBySomeValue(item: Item): Int {
+  private fun decreaseQualityBySomeValue(): Int {
     return 0
-  }
-
-  fun decreaseSellIn(item: Item): Int {
-    return item.sellIn - QUALITY_CONSTANT_ONE
   }
 }

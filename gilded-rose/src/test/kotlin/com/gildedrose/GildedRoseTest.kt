@@ -5,6 +5,7 @@ import com.gildedrose.Constants.AGED_BRIE
 import com.gildedrose.Constants.BACKSTAGE_PASSES
 import com.gildedrose.Constants.SULFURAS_HAND_OF_RAGNAROS
 import org.approvaltests.Approvals
+import org.approvaltests.combinations.CombinationApprovals
 import org.approvaltests.namer.NamerFactory
 import org.approvaltests.reporters.QuietReporter
 import org.approvaltests.reporters.UseReporter
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import org.lambda.functions.Function1
 
 class GildedRoseTest {
 
@@ -73,6 +75,13 @@ class GildedRoseTest {
 
     interactions.append("result(out)", output.toString())
     // then
+
+//    CombinationApprovals.verifyAllCombinations(
+//      Function1 {
+//        app.fwdUpdateInformation(Item(name,  sellin, quality))
+//      }
+//    )
+
     NamerFactory.withParameters(testName).use {
       Approvals.verify(textWriter(interactions.toString()), NamerWithoutBuildInfo())
     }
